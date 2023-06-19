@@ -3,8 +3,9 @@ import socket
 import json
 import base64
 import logging
+import time
 
-server_address=('172.16.16.102',8889)
+server_address=('172.16.16.101',8889)
 
 def send_command(command_str=""):
     global server_address
@@ -13,9 +14,8 @@ def send_command(command_str=""):
     logging.warning(f"connecting to {server_address}")
     try:
         logging.warning(f"sending message ")
-        command_str += "\r\n\r\n"
         sock.sendall(command_str.encode())
-        data_received="" #empty string
+        data_received=""
         while True:
             data = sock.recv(16)
             if data:
@@ -41,70 +41,69 @@ def remote_list():
             print(f"- {nmfile}")
         return True
     else:
-        print('Gagal mendapatkan list file')
+        print("Gagal mendapatkan list file")
         return False
 
-    
 def remote_get(filename=""):
     command_str=f"GET {filename}"
     hasil = send_command(command_str)
     if (hasil['status']=='OK'):
+        #proses file dalam bentuk base64 ke bentuk bytes
         namafile= hasil['data_namafile']
         isifile = base64.b64decode(hasil['data_file'])
         fp = open(namafile,'wb+')
         fp.write(isifile)
         fp.close()
-        print(f'Berhasil mendapatkan file {filename}')
         return True
     else:
-        print(f'Gagal mendapatkan file {filename}')
+        print(f"Gagal mendapatkan file {filename}")
         return False
-
     
-def remote_upload(filename=""):
+def remote_post(filename=""):
     fp = open(filename,'rb')
-    file_base64 = base64.b64encode(fp.read()).decode()
-    command_str=f"UPLOAD {filename} {file_base64}"
+    isifile = base64.b64encode(fp.read()).decode('utf-8')
+    fp.close()
+    command_str=f"POST {filename} {isifile}\n"
     hasil = send_command(command_str)
     if (hasil['status']=='OK'):
-        print(f'Berhasil mengupload file {filename}')
+        print(f"Berhasil mengupload file {filename}")
         return True
     else:
-        print(f'Gagal mengupload file {filename}')
-        return False  
+        print(hasil)
+        print(f"Gagal mengupload file {filename}")
+        return False
 
 def remote_delete(filename=""):
-    command_str=f"DELETE {filename}"
+    command_str=f"DELETE {filename}\n"
     hasil = send_command(command_str)
-    if (hasil['status']=='OK'):
-        print(f'Berhasil menghapus file {filename}')
+    if (hasil['status']=='OK'):    
+        print(f"Berhasil menghapus file {filename}")
         return True
     else:
-        print(f'Gagal menghapus file {filename}')
+        print(f"Gagal menghapus file {filename}")
         return False
 
+def manage_input(command, cmd_req):
+    if command.lower() == 'list':
+        remote_list()
+    elif cmd_req[0].lower() == 'get':
+        remote_get(cmd_req[1])
+    elif cmd_req[0].lower() == 'upload':
+        remote_upload(cmd_req[1])
+    elif cmd_req[0].lower() == 'delete':
+        remote_delete(cmd_req[1])
+
 if __name__=='__main__':
-    while True:
-        print("""
-+++++++++++++++++++++++++++++++
-File Management CLI:
-1. LIST
-2. GET [filename]
-3. UPLOAD [filename]
-4. DELETE [filename]
-5. EXIT
-+++++++++++++++++++++++++++++++
-Please input your command:
-""")
-        command = input()
-        cmd_req = command.split(" ")
-        if command == 'list' or command == 'LIST':
-            remote_list()
-        elif command == 'exit' or command == 'EXIT':
-            break
-        elif cmd_req[0] == 'get' or cmd_req[0] == 'GET':
-            remote_get(cmd_req[1])
-        elif cmd_req[0] == 'upload' or cmd_req[0] == 'UPLOAD':
-            remote_upload(cmd_req[1])
-        elif cmd_req[0] == 'delete' or cmd_req[0] == 'DELETE':
-            remote_delete(cmd_req[1])
+    print("++++++++++++++++++++++++++++++++++++")
+    print("FILE MANAGEMENT CLI:")
+    print("1. LIST")
+    print("2. GET [filename]")
+    print("3. UPLOAD [filename]")
+    print("4. DELETE [filename]")
+    print("++++++++++++++++++++++++++++++++++++")
+    print("Input your command: ")
+    command = input()
+    cmd_req = command.split(" ")
+    manage_input(command, cmd_req)
+    
+    

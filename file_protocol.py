@@ -20,7 +20,8 @@ string
 class FileProtocol:
     def __init__(self):
         self.file = FileInterface()
-    def proses_request(self,data=''):
+        
+    def proses_request(self, data=''):
         logging.warning(f"string diproses: {data}")
         data_split = shlex.split(data.lower())
         try:
@@ -32,9 +33,9 @@ class FileProtocol:
         except Exception:
             return json.dumps(dict(status='ERROR',data='request tidak dikenali'))
 
-        
+
 if __name__=='__main__':
     #contoh pemakaian
-    file_protocol = FileProtocol()
-    print(file_protocol.proses_request("LIST"))
-    print(file_protocol.proses_request("GET pokijan.jpg"))
+    fp = FileProtocol()
+    print(fp.proses_request("LIST"))
+    print(fp.proses_request("GET pokijan.jpg"))

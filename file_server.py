@@ -5,7 +5,7 @@ import logging
 
 
 from file_protocol import  FileProtocol
-file_protocols = FileProtocol()
+fp = FileProtocol()
 
 
 class ProcessTheClient(threading.Thread):
@@ -21,9 +21,9 @@ class ProcessTheClient(threading.Thread):
             if data:
                 msg += data.decode()
                 if msg[-1] == '\n':
-                    response = file_protocols.proses_request(msg)
-                    response = response + "\r\n\r\n"
-                    self.connection.sendall(response.encode())
+                    hasil = fp.proses_request(msg)
+                    hasil = hasil + "\r\n\r\n"
+                    self.connection.sendall(hasil.encode('utf-8'))
             else:
                 break
         self.connection.close()
@@ -57,4 +57,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
