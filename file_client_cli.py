@@ -89,7 +89,7 @@ def manage_input(command, cmd_req):
     elif cmd_req[0].lower() == 'get':
         remote_get(cmd_req[1])
     elif cmd_req[0].lower() == 'upload':
-        remote_upload(cmd_req[1])
+        remote_post(cmd_req[1])
     elif cmd_req[0].lower() == 'delete':
         remote_delete(cmd_req[1])
 
