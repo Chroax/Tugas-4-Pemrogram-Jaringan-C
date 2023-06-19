@@ -22,7 +22,7 @@ class ProcessTheClient(threading.Thread):
                 d = data.decode()
                 buffer += d
                 if "\r\n\r\n" in buffer:
-                    hasil = fp.proses_string(buffer)
+                    hasil = fp.proses_request(buffer)
                     hasil=hasil+"\r\n\r\n"
                     self.connection.sendall(hasil.encode())
             else:
