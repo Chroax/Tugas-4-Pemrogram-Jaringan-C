@@ -5,7 +5,7 @@ import logging
 
 
 from file_protocol import  FileProtocol
-fp = FileProtocol()
+file_protocols = FileProtocol()
 
 
 class ProcessTheClient(threading.Thread):
@@ -15,16 +15,15 @@ class ProcessTheClient(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        buffer = ""
+        msg = ""
         while True:
             data = self.connection.recv(32)
             if data:
-                d = data.decode()
-                buffer += d
-                if "\r\n\r\n" in buffer:
-                    hasil = fp.proses_request(buffer)
-                    hasil=hasil+"\r\n\r\n"
-                    self.connection.sendall(hasil.encode())
+                msg += data.decode()
+                if msg[-1] == '\n':
+                    response = file_protocols.proses_request(msg)
+                    response = response + "\r\n\r\n"
+                    self.connection.sendall(response.encode())
             else:
                 break
         self.connection.close()
@@ -52,7 +51,7 @@ class Server(threading.Thread):
 
 
 def main():
-    svr = Server(ipaddress='0.0.0.0',port=6666)
+    svr = Server(ipaddress='0.0.0.0',port=8889)
     svr.start()
 
 
