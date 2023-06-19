@@ -24,7 +24,7 @@ LIST
   - data: list file
 - GAGAL:
   - status: ERROR
-  - data: pesan kesalahan
+  - data: 'Gagal mendapatkan list file'
 
 GET
 * TUJUAN: untuk mendapatkan isi file dengan menyebutkan nama file dalam parameter
@@ -37,20 +37,20 @@ GET
   - data_file : isi file yang diminta (dalam bentuk base64)
 - GAGAL:
   - status: ERROR
-  - data: pesan kesalahan
+  - data: 'Gagal mendapatkan file'
 
 POST
 * TUJUAN: untuk mengupload file dengan menyebutkan nama file dalam parameter
 * PARAMETER:
   - PARAMETER1 : nama file
-  - PARAMETER2 : encoded file (dalam bentuk base64)
+  - PARAMETER2 : encoded file yang dikonversi ke base64
 * RESULT:
 - BERHASIL:
   - status: OK
-  - data: pesan sukses
+  - data: 'Berhasil mengupload file'
 - GAGAL:
   - status: ERROR
-  - data: pesan kesalahan
+  - data: 'Gagal mengupload file'
 
 DELETE
 * TUJUAN: untuk menghapus file dengan menyebutkan nama file dalam parameter
@@ -59,7 +59,7 @@ DELETE
 * RESULT:
 - BERHASIL:
   - status: OK
-  - data : pesan sukses
+  - data : 'Berhasil menghapus file'
 - GAGAL:
   - status: ERROR
-  - data: pesan kesalahan
+  - data: 'Gagal menghapus file'
