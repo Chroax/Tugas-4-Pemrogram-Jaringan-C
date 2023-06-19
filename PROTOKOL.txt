@@ -37,7 +37,7 @@ GET
   - data_file : isi file yang diminta (dalam bentuk base64)
 - GAGAL:
   - status: ERROR
-  - data: 'Gagal mendapatkan file'
+  - data: 'Gagal mendapatkan file {filename}'
 
 POST
 * TUJUAN: untuk mengupload file dengan menyebutkan nama file dalam parameter
@@ -47,10 +47,10 @@ POST
 * RESULT:
 - BERHASIL:
   - status: OK
-  - data: 'Berhasil mengupload file'
+  - data: 'Berhasil mengupload file {filename}'
 - GAGAL:
   - status: ERROR
-  - data: 'Gagal mengupload file'
+  - data: 'Gagal mengupload file {filename}'
 
 DELETE
 * TUJUAN: untuk menghapus file dengan menyebutkan nama file dalam parameter
@@ -59,7 +59,7 @@ DELETE
 * RESULT:
 - BERHASIL:
   - status: OK
-  - data : 'Berhasil menghapus file'
+  - data : 'Berhasil menghapus file {filename}'
 - GAGAL:
   - status: ERROR
-  - data: 'Gagal menghapus file'
+  - data: 'Gagal menghapus file {filename}'

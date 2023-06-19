@@ -23,6 +23,7 @@ class FileInterface:
             return dict(status='OK',data_namafile=filename,data_file=isifile)
         except Exception as e:
             return dict(status='ERROR',data=str(e))
+        
     def post(self,filename,file_base64):
         try:
             bfile = base64.b64decode(file_base64)
@@ -32,6 +33,7 @@ class FileInterface:
             return dict(status='OK',data=f'file {filename} berhasil diupload')
         except Exception as e:
             return dict(status='ERROR',data=str(e))
+        
     def delete(self,filename):
         try:
             if (filename == ''):
@@ -43,6 +45,7 @@ class FileInterface:
         except Exception as e:
             return dict(status='ERROR',data=str(e))
 
+        
 if __name__=='__main__':
     f = FileInterface()
     print(f.list())
